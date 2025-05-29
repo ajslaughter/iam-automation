@@ -1,4 +1,4 @@
-function Log-Message {
+function Write-Log {
     param (
         [string]$Message
     )
