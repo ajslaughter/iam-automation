@@ -18,8 +18,8 @@ jobs:
 
       - name: Lint (PSScriptAnalyzer)
         shell: pwsh
-        run: Invoke-ScriptAnalyzer -Path . -Recurse -ReportSummary
+        run: Invoke-ScriptAnalyzer -Path src,Tests -Recurse -ReportSummary
 
       - name: Run Tests (Pester)
         shell: pwsh
-        run: Invoke-Pester -CI -Output Detailed
+        run: Invoke-Pester -CI -Output Detailed -Path Tests
