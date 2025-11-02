@@ -1,4 +1,29 @@
-# IAM Automation
+# Windows SRE Automation Portfolio
+
+![CI](https://github.com/ajslaughter/iam-automation/actions/workflows/ci.yml/badge.svg)
+
+Hands-on, production-grade PowerShell for Windows SRE scenarios. Every automation ships with tests, continuous integration, and a pull-request workflow so changes stay reviewable and reliable.
+
+## What's inside
+
+- **Identity (IamLab)** – lab provisioning scripts, simulated access reviews, helper modules.
+- **Group Policy (GPO)** – opinionated baselines and import/export automation.
+- **Patching** – Windows Update compliance reporting and remediation scaffolding.
+- **Health & DR** – lab health checks, drift reports, and recovery references.
+- **Hybrid** – scripts for cloud-connected and cross-domain tasks.
+
+## Quick start
+
+```powershell
+Import-Module .\src\Modules\IamLab\IamLab.psm1 -Force
+.\src\Scripts\Identity\New-LabUser.ps1 -Username 'lab.engineer'
+.\src\Patch\Get-WindowsUpdateCompliance.ps1 -ComputerName 'srv01' -OutputPath '.\out\patch'
+```
+
+## Completed automations
+
+- Day 01 – Active Directory structure bootstrap [`src/Scripts/Identity/New-DeptStructure.ps1`](src/Scripts/Identity/New-DeptStructure.ps1)
+- Day 02 – Windows Update compliance reporting [`src/Patch/Get-WindowsUpdateCompliance.ps1`](src/Patch/Get-WindowsUpdateCompliance.ps1)
 
 ## Day 02 — Windows Update Compliance
 

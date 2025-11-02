@@ -5,7 +5,7 @@
       "label": "Run Pester",
       "type": "shell",
       "command": "pwsh",
-      "args": ["-NoProfile", "-Command", "Invoke-Pester"],
+      "args": ["-NoProfile", "-Command", "Invoke-Pester -Path Tests"],
       "problemMatcher": []
     },
     {
