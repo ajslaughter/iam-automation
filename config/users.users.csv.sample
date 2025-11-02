@@ -1,0 +1,5 @@
+SamAccountName,GivenName,Surname,OU,Email,Title,Department,AddToGroups
+jsmith,John,Smith,IT,jsmith@corp.local,Systems Administrator,IT,"GG_IT_All"
+adoe,Amy,Doe,Marketing,adoe@corp.local,Marketing Specialist,Marketing,"GG_Marketing_All"
+mbrown,Maria,Brown,Finance,mbrown@corp.local,Financial Analyst,Finance,"GG_Finance_All"
+kpatel,Kiran,Patel,Managers,kpatel@corp.local,Operations Manager,Managers,"GG_IT_All;GG_Marketing_All;GG_Finance_All;GG_Managers_All"

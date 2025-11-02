@@ -1,0 +1,12 @@
+{
+  "DomainDN": "DC=corp,DC=local",
+  "CompanyOUDN": "OU=Company,DC=corp,DC=local",
+  "Departments": [
+    "IT",
+    "Marketing",
+    "Finance",
+    "Managers"
+  ],
+  "DefaultPasswordSecretName": "IamLabDefaultPassword",
+  "LoggingRoot": ".\\logs"
+}

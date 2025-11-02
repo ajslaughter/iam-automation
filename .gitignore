@@ -1,0 +1,14 @@
+# Logs
+logs/
+*.log
+
+# PowerShell
+*.ps1xml
+
+# IDEs
+.vscode/
+.idea/
+
+# OS
+Thumbs.db
+.DS_Store
