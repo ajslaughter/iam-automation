@@ -1,0 +1,16 @@
+@{
+    SchemaVersion           = '2.0.0.0'
+    SessionType             = 'RestrictedRemoteServer'
+    TranscriptDirectory     = 'C:\\ProgramData\\IamLab\\Transcripts'
+    RunAsVirtualAccount     = $true
+    ModulesToImport         = @(
+        @{ ModuleName = 'IamLab'; ModuleVersion = '1.0.0' }
+    )
+    VisibleFunctions        = @('Get-IamLabSecret', 'Get-IamLabCredential', 'Invoke-IamLabSelfTest', 'Get-IamLabFeatureFlag')
+    VisibleExternalCommands = @()
+    VisibleCmdlets          = @()
+    FunctionDefinitions     = @()
+    ScriptsToProcess        = @()
+    AliasDefinitions        = @{}
+    RoleDefinitions         = @{}
+}
