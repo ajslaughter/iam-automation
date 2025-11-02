@@ -1,0 +1,26 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Run Pester",
+      "type": "shell",
+      "command": "pwsh",
+      "args": ["-NoProfile", "-Command", "Invoke-Pester"],
+      "problemMatcher": []
+    },
+    {
+      "label": "Lab Health Check",
+      "type": "shell",
+      "command": "pwsh",
+      "args": ["-NoProfile", "-File", "${workspaceFolder}/src/Scripts/Health/Test-LabHealth.ps1"],
+      "problemMatcher": []
+    },
+    {
+      "label": "Initialize Environment (WhatIf)",
+      "type": "shell",
+      "command": "pwsh",
+      "args": ["-NoProfile", "-File", "${workspaceFolder}/src/Scripts/Initialize-Environment.ps1", "-WhatIf"],
+      "problemMatcher": []
+    }
+  ]
+}
