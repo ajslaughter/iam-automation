@@ -1,0 +1,30 @@
+name: Windows Update Compliance (Weekly)
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+
+jobs:
+  scan:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        shell: pwsh
+        run: |
+          Set-PSRepository -Name 'PSGallery' -InstallationPolicy Trusted
+          Install-Module Pester -Scope CurrentUser -Force
+
+      - name: Run compliance scan
+        shell: pwsh
+        run: |
+          $outputPath = Join-Path -Path (Get-Location) -ChildPath 'out/patch'
+          ./src/Patch/Get-WindowsUpdateCompliance.ps1 -ComputerName 'localhost' -OutputPath $outputPath -Verbose
+
+      - name: Upload compliance artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-update-compliance
+          path: out/patch/*-compliance.*
