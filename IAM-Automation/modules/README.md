@@ -13,6 +13,7 @@ IAM-AUTOMATION/
 │   ├── bulk_provision.ps1           # Provision multiple users from CSV
 │   ├── cleanup_expired_accounts.ps1 # Stub: Remove expired/stale accounts
 │   ├── common.psm1                  # Shared logging utilities
+│   ├── Invoke-IntegrationStack.ps1  # Automate PR stacking for release branches
 │   ├── enforce_mfa_stub.ps1         # Stub: Placeholder for MFA logic
 │   ├── list_user_groups.ps1         # View user group membership
 │   ├── parse_login_attempts.ps1     # Parse login attempts from logs
@@ -65,6 +66,10 @@ Each script accepts parameters from the command line. Examples:
 
 # Parse login attempts from a sample log file
 .\modules\parse_login_attempts.ps1 -LogPath ".\logs\iam_log.txt"
+
+# Stack integration pull requests (requires GitHub CLI)
+.\modules\Invoke-IntegrationStack.ps1
+Invoke-IntegrationStack -IntegrationBranch "integration/stack-2025-11-02"
 ```
 
 ---
