@@ -1,5 +1,7 @@
 # Windows SRE Automation Portfolio
 
+> Last updated: 2025-11-19
+
 ![CI](https://github.com/ajslaughter/iam-automation/actions/workflows/ci.yml/badge.svg)
 
 Hands-on, production-grade PowerShell for Windows SRE scenarios. Every automation ships with tests, continuous integration, and a pull-request workflow so changes stay reviewable and reliable.
