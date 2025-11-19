@@ -8,11 +8,11 @@ Hands-on, production-grade PowerShell for Windows SRE scenarios. Every automatio
 
 ## What's inside
 
-- **Identity (IamLab)** – lab provisioning scripts, simulated access reviews, helper modules.
-- **Group Policy (GPO)** – opinionated baselines and import/export automation.
-- **Patching** – Windows Update compliance reporting and remediation scaffolding.
-- **Health & DR** – lab health checks, drift reports, and recovery references.
-- **Hybrid** – scripts for cloud-connected and cross-domain tasks.
+- **Identity Management** – provisioning scripts, access reviews, and helper modules.
+- **Group Policy Management** – opinionated baselines and import/export automation.
+- **Patch Management** – Windows Update compliance reporting and remediation scaffolding.
+- **Health & Disaster Recovery** – health checks, drift reports, and recovery references.
+- **Hybrid Identity** – scripts for cloud-connected and cross-domain tasks.
 
 ## Quick start
 
