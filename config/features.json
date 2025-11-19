@@ -1,5 +1,5 @@
 {
-  "HybridIdentity": false,
+  "HybridIdentity": true,
   "ChatOps": false,
   "SafetyChecks": true
 }

@@ -1,57 +1,37 @@
 # AP Field Operations Automation Toolkit
 
-**A specialized automation suite designed for Systems Analysts supporting regional construction job sites.**
+> **Focus:** Day-one ready PowerShell for Systems Analysts supporting construction job sites.
+> **Alignment:** IIF Safety Culture, Site Connectivity, and Endpoint Management (Meraki, SCCM).
 
-This toolkit focuses on Incident and Injury Free (IIF) safety compliance, rapid site connectivity diagnostics, and standardized endpoint mobilization. It is designed to provide "Day 1" value for Field Operations.
+![CI](https://github.com/ajslaughter/ap-fieldops-automation/actions/workflows/ci.yml/badge.svg)
 
-## Features
+This toolkit is a specialized automation suite designed for systems teams operating across regional job sites. It provides idempotent scripts for rapid diagnosis, secure mobilization, and compliance with the Incident and Injury Free (IIF) safety culture.
 
-- **Safety First**: Enforces safety culture with mandatory safety briefs and hazard checks.
-- **Site Connectivity**: Rapidly diagnoses network issues (Latency, VPN, Meraki) at remote sites.
-- **Workstation Prep**: Automates the setup of field and office laptops, ensuring consistency and speed.
-- **Legacy Support**: Includes legacy identity management scripts for backward compatibility.
+## Core Automations
 
-## Usage
+| Script | Location | Job Responsibility Covered |
+| :--- | :--- | :--- |
+| **Invoke-SafetyBrief.ps1** | `src/Scripts/Safety` | Championing the **IIF Safety Culture**. |
+| **Test-SiteConnectivity.ps1** | `src/Scripts/Network` | **Troubleshooting** network connectivity, **TCP/IP** validation. |
+| **Invoke-WorkstationPrep.ps1** | `src/Scripts/Client` | **Installing/repairing hardware and software**, imaging, **SCCM** knowledge. |
+| **Join-DomainAndPlace.ps1** | `src/Scripts/Computers` | Coordinating the setup and deployment of computer hardware. |
 
-### 1. Safety Brief
-Enforce safety protocols before starting work.
+## Quick Start (Demonstrating Day 1 Value)
+
 ```powershell
-.\src\Scripts\Safety\Invoke-SafetyBrief.ps1
+# 1. Enforce IIF safety protocols before beginning work.
+.\src\Scripts\Safety\Invoke-SafetyBrief.ps1 -JobSiteID 'BismarckDC-001' -Verbose
+
+# 2. Immediately diagnose the site's network health (VPN, Meraki, Internet).
+.\src\Scripts\Network\Test-SiteConnectivity.ps1 -CorpVPNEndpoint 'corp-vpn.apinc.com' -Verbose
+
+# 3. Standardize and prep a new field laptop for a Project Manager.
+.\src\Scripts\Client\Invoke-WorkstationPrep.ps1 -RoleProfile 'Field' -WhatIf
 ```
 
-### 2. Site Connectivity Test
-Diagnose network issues at a remote job site.
-```powershell
-.\src\Scripts\Network\Test-SiteConnectivity.ps1
-```
+## Legacy Infrastructure Management
+The toolkit retains full-stack capabilities for core infrastructure tasks:
 
-### 3. Workstation Preparation
-Prepare a new laptop for a Field Engineer or Office Staff.
-```powershell
-# For Field Staff (Installs Bluebeam, Citrix)
-.\src\Scripts\Client\Invoke-WorkstationPrep.ps1 -RoleProfile Field
-
-# For Office Staff (Installs Office 365, Teams)
-.\src\Scripts\Client\Invoke-WorkstationPrep.ps1 -RoleProfile Office
-```
-
-## Project Structure
-
-```text
-src/
-├── Scripts/
-│   ├── Safety/          # Safety protocols and checks
-│   ├── Network/         # Connectivity diagnostics
-│   ├── Client/          # Endpoint preparation
-│   └── Legacy_Backend/  # Legacy identity management scripts
-├── Modules/             # Shared PowerShell modules
-└── ...
-```
-
-## Configuration
-
-Configuration is managed in `config/features.json`. Ensure `"SafetyChecks": true` is enabled.
-
-## Documentation
-
-- [Safety Protocols](docs/SAFETY_PROTOCOLS.md)
+- **Active Directory**: Full user provisioning, group, and OU management (Legacy_Identity).
+- **Group Policy**: Idempotent GPO creation and linking for hardening baselines (Legacy_GPO).
+- **Health & DR**: Domain controller health checks and configuration drift reporting (Legacy_Health, Legacy_Backup).

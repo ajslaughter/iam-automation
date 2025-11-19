@@ -1,86 +1,56 @@
 <#
 .SYNOPSIS
-    Automates the setup of a new field laptop.
-
+    Automates "Day 1" configuration and application deployment for a new endpoint.
 .DESCRIPTION
-    This script prepares a workstation for deployment by removing bloatware,
-    setting power configurations, and installing role-specific software.
-
+    Standardizes a workstation for an Adolfson & Peterson employee. Mimics an SCCM Task Sequence.
+    - Removes bloatware.
+    - Sets power management.
+    - Installs role-based software (Field or Office).
 .PARAMETER RoleProfile
-    Specifies the role for the workstation. Valid values are "Office" or "Field".
-
-.EXAMPLE
-    .\Invoke-WorkstationPrep.ps1 -RoleProfile Field
-
-.NOTES
-    File Name      : Invoke-WorkstationPrep.ps1
-    Author         : DevOps Team
-    Prerequisite   : PowerShell v5.1+, Admin Privileges
+    The standard workstation profile to apply: 'Office' or 'Field'.
 #>
-
-[CmdletBinding()]
+[CmdletBinding(SupportsShouldProcess=$true)]
 param(
-    [Parameter(Mandatory=$true)]
+    [Parameter(Mandatory)]
     [ValidateSet("Office", "Field")]
     [string]$RoleProfile
 )
 
-process {
-    Write-Host "Starting Workstation Preparation for Role: $RoleProfile" -ForegroundColor Cyan
-    
-    # 1. Remove Bloatware
-    Write-Verbose "Removing bloatware..."
-    $Bloatware = @("Microsoft.MicrosoftSolitaireCollection", "Microsoft.XboxApp")
-    foreach ($App in $Bloatware) {
-        try {
-            # Mocking the removal for safety in this environment, but code is production-ready
-            # Get-AppxPackage -Name $App | Remove-AppxPackage -ErrorAction Stop
-            Write-Host "  [REMOVE] $App removed successfully." -ForegroundColor Gray
-        } catch {
-            Write-Warning "  [SKIP] Could not remove $App or not found."
-        }
-    }
+Write-Host "🚀 Starting Workstation Prep for Profile: $RoleProfile" -ForegroundColor Cyan
 
-    # 2. Set Power Configuration
-    Write-Verbose "Setting power configuration..."
-    try {
-        # Set to High Performance (GUID for High Performance)
-        powercfg /setactive 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c
-        Write-Host "  [CONFIG] Power scheme set to High Performance." -ForegroundColor Green
-    } catch {
-        Write-Warning "  [FAIL] Failed to set power scheme."
+# 1. Debloat / Cleanup
+$Bloatware = @("XboxGameOverlay", "Solitaire", "SkypeApp", "News")
+Write-Verbose "Removing Windows bloatware..."
+foreach ($app in $Bloatware) {
+    if ($PSCmdlet.ShouldProcess("System", "Remove $app")) {
+        Get-AppxPackage *$app* | Remove-AppxPackage -ErrorAction SilentlyContinue
     }
-
-    # 3. Install Software (Mock)
-    Write-Verbose "Installing software packages..."
-    if ($RoleProfile -eq "Field") {
-        Write-Host "  [INSTALL] Bluebeam Revu..." -ForegroundColor Yellow
-        Start-Sleep -Milliseconds 500
-        Write-Host "  [DONE] Bluebeam Revu installed." -ForegroundColor Green
-        
-        Write-Host "  [INSTALL] Citrix Receiver..." -ForegroundColor Yellow
-        Start-Sleep -Milliseconds 500
-        Write-Host "  [DONE] Citrix Receiver installed." -ForegroundColor Green
-    }
-    elseif ($RoleProfile -eq "Office") {
-        Write-Host "  [INSTALL] Office 365..." -ForegroundColor Yellow
-        Start-Sleep -Milliseconds 500
-        Write-Host "  [DONE] Office 365 installed." -ForegroundColor Green
-        
-        Write-Host "  [INSTALL] Microsoft Teams..." -ForegroundColor Yellow
-        Start-Sleep -Milliseconds 500
-        Write-Host "  [DONE] Microsoft Teams installed." -ForegroundColor Green
-    }
-
-    # 4. Log Device Info
-    $Bios = Get-CimInstance Win32_BIOS
-    $System = Get-CimInstance Win32_ComputerSystem
-    
-    Write-Host ""
-    Write-Host "Device Information:" -ForegroundColor White
-    Write-Host "  Serial Number : $($Bios.SerialNumber)" -ForegroundColor Gray
-    Write-Host "  Asset Tag     : $($System.Model)" -ForegroundColor Gray # Using Model as proxy for Asset Tag often
-    
-    Write-Host ""
-    Write-Host "Workstation Prep Completed Successfully." -ForegroundColor Cyan
 }
+
+# 2. Power Configuration (Optimizing for performance/uptime)
+if ($PSCmdlet.ShouldProcess("PowerScheme", "Set High Performance")) {
+    # GUID for High Performance: 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c
+    powercfg /setactive 8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c
+    Write-Host "   - Power scheme set to High Performance"
+}
+
+# 3. Install Software (Simulated Deployment via SCCM/Intune)
+Write-Host "📦 Starting role-based software installation..."
+$CommonApps = @("Microsoft Edge", "Adobe Reader", "VPN Client")
+$FieldApps = @("Bluebeam Revu (CAD)", "Project Management Suite") # Construction specific tools
+$OfficeApps = @("Office 365 ProPlus", "Teams/Video Conferencing Client")
+
+$InstallList = $CommonApps
+if ($RoleProfile -eq "Field") { $InstallList += $FieldApps }
+if ($RoleProfile -eq "Office") { $InstallList += $OfficeApps }
+
+foreach ($pkg in $InstallList) {
+    if ($PSCmdlet.ShouldProcess("Deployment Tool", "Install application: $pkg")) {
+        # Mocking deployment: In production, this would call Install-Package or trigger SCCM client
+        Write-Host "   ✅ Installed: $pkg" -ForegroundColor Green
+    }
+}
+
+# 4. System Verification
+$serial = (Get-CimInstance Win32_Bios).SerialNumber
+Write-Host "📝 Prep Complete. Serial: $serial | Profile: $RoleProfile" -ForegroundColor Gray
