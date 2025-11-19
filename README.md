@@ -2,7 +2,7 @@
 
 > **Enterprise Grade Field Automation for Adolfson & Peterson Construction**
 >
-> *Built by [Your Name] for the Systems Analyst Role*
+> *Built for the Systems Analyst Role*
 
 ![Platform](https://img.shields.io/badge/Platform-Windows%20PowerShell-blue) ![Focus](https://img.shields.io/badge/Focus-Field%20Operations-green) ![Safety](https://img.shields.io/badge/Compliance-IIF%20Safety-orange)
 
