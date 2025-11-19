@@ -1,6 +1,6 @@
 # Identity Lab Automation Toolkit
 
-This folder contains helper scripts that support the lab identity scenarios in the Windows SRE automation portfolio. The scripts simulate typical IAM flows such as creating and disabling lab users, generating access reports, and experimenting with change tooling.
+This folder contains helper scripts that support the lab identity scenarios in the IAM Automation Tool. The scripts simulate typical IAM flows such as creating and disabling lab users, generating access reports, and experimenting with change tooling.
 
 ---
 
