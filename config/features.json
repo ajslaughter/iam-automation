@@ -1,4 +1,5 @@
 {
   "HybridIdentity": false,
-  "ChatOps": false
+  "ChatOps": false,
+  "SafetyChecks": true
 }
