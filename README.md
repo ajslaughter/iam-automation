@@ -22,10 +22,10 @@ Import-Module .\src\Modules\IamLab\IamLab.psm1 -Force
 
 ## Completed automations
 
-- Day 01 – Active Directory structure bootstrap [`src/Scripts/Identity/New-DeptStructure.ps1`](src/Scripts/Identity/New-DeptStructure.ps1)
-- Day 02 – Windows Update compliance reporting [`src/Patch/Get-WindowsUpdateCompliance.ps1`](src/Patch/Get-WindowsUpdateCompliance.ps1)
+- Identity Management – Active Directory structure bootstrap [`src/Scripts/Identity/New-DeptStructure.ps1`](src/Scripts/Identity/New-DeptStructure.ps1)
+- Patch Management – Windows Update compliance reporting [`src/Patch/Get-WindowsUpdateCompliance.ps1`](src/Patch/Get-WindowsUpdateCompliance.ps1)
 
-## Day 02 — Windows Update Compliance
+## Patch Management — Windows Update Compliance
 
 Generate a per-host view of pending Windows Updates without triggering installations or reboots.
 
