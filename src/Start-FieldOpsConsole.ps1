@@ -39,7 +39,7 @@ do {
     Show-Header
     
     # Menu Options
-    Write-Host " [1] 🦺  DAILY SAFETY BRIEFING (IIF Compliance)" -ForegroundColor ($SafetyUnlocked ? "Green" : "Yellow")
+    Write-Host " [1] 🦺  DAILY SAFETY BRIEFING (IIF Compliance)" -ForegroundColor ('Yellow', 'Green')[[int]$SafetyUnlocked]
     
     if ($SafetyUnlocked) {
         Write-Host " [2] 📡  Site Connectivity Test (Meraki/VPN)"
