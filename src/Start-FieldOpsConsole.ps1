@@ -1,12 +1,3 @@
-<#
-.SYNOPSIS
-    The central command interface for Adolfson & Peterson Field Operations.
-.DESCRIPTION
-    A unified CLI menu that enforces IIF Safety compliance before unlocking
-    technical tools (Network Diagnostics, Inventory, Printing, Workstation Prep).
-#>
-param()
-
 # --- HELPER FUNCTIONS ---
 function Show-Header {
     Clear-Host
@@ -34,21 +25,22 @@ function Invoke-Tool {
 $SafetyUnlocked = $false
 $ScriptRoot = "$PSScriptRoot\Scripts"
 
-# --- MAIN LOOP ---
+# --- MAIN APPLICATION LOOP ---
 do {
     Show-Header
     
-    # Menu Options
-    Write-Host " [1] 🦺  DAILY SAFETY BRIEFING (IIF Compliance)" -ForegroundColor ('Yellow', 'Green')[[int]$SafetyUnlocked]
+    # Menu Options - Uses PS 5.1 compatible array lookup for color
+    $color = ('Yellow', 'Green')[[int]$SafetyUnlocked]
+    Write-Host " [1] DAILY SAFETY BRIEFING (IIF Compliance)" -ForegroundColor $color
     
     if ($SafetyUnlocked) {
-        Write-Host " [2] 📡  Site Connectivity Test (Meraki/VPN)"
-        Write-Host " [3] 🕸️   Packet Capture (Netsh Trace)"
-        Write-Host " [4] 🖨️   Repair Print System"
-        Write-Host " [5] 💻  Workstation Prep (SCCM/Imaging)"
-        Write-Host " [6] 📝  Device Asset Inventory"
+        Write-Host " [2] Site Connectivity Test (Meraki/VPN)"
+        Write-Host " [3] Packet Capture (Netsh Trace)"
+        Write-Host " [4] Repair Print System"
+        Write-Host " [5] Workstation Prep (SCCM/Imaging)"
+        Write-Host " [6] Device Asset Inventory"
     } else {
-        Write-Host " [2-6] 🔒 (LOCKED - REQUIRES SAFETY ACKNOWLEDGEMENT)" -ForegroundColor DarkGray
+        Write-Host " [2-6] (LOCKED - REQUIRES SAFETY ACKNOWLEDGEMENT)" -ForegroundColor DarkGray
     }
     Write-Host " [Q] Quit"
     Write-Host ""
@@ -58,25 +50,43 @@ do {
     switch ($Selection) {
         '1' { 
             try {
-                & "$ScriptRoot\Safety\Invoke-SafetyBrief.ps1" -ErrorAction Stop
+                Invoke-Tool "$ScriptRoot\Safety\Invoke-SafetyBrief.ps1"
                 $SafetyUnlocked = $true
             } catch {
                 $SafetyUnlocked = $false
             }
-            Write-Host "`n[PRESS ENTER TO CONTINUE]"
-            $null = Read-Host
         }
-        '2' { if ($SafetyUnlocked) { Invoke-Tool "$ScriptRoot\Network\Test-SiteConnectivity.ps1" } }
-        '3' { if ($SafetyUnlocked) { Invoke-Tool "$ScriptRoot\Network\Invoke-QuickPacketCapture.ps1" } }
-        '4' { if ($SafetyUnlocked) { Invoke-Tool "$ScriptRoot\Client\Repair-PrintSystem.ps1" } }
+        '2' { 
+            if ($SafetyUnlocked) { 
+                Invoke-Tool "$ScriptRoot\Network\Test-SiteConnectivity.ps1" 
+            } 
+        }
+        '3' { 
+            if ($SafetyUnlocked) { 
+                Invoke-Tool "$ScriptRoot\Network\Invoke-QuickPacketCapture.ps1" 
+            } 
+        }
+        '4' { 
+            if ($SafetyUnlocked) { 
+                Invoke-Tool "$ScriptRoot\Client\Repair-PrintSystem.ps1" 
+            } 
+        }
         '5' { 
             if ($SafetyUnlocked) { 
                 $Role = Read-Host "Select Profile (Office/Field)"
                 Invoke-Tool "$ScriptRoot\Client\Invoke-WorkstationPrep.ps1" -RoleProfile $Role
             } 
         }
-        '6' { if ($SafetyUnlocked) { Invoke-Tool "$ScriptRoot\Client\Get-DeviceInventory.ps1" } }
+        '6' { 
+            if ($SafetyUnlocked) { 
+                Invoke-Tool "$ScriptRoot\Client\Get-DeviceInventory.ps1" 
+            } 
+        }
         'q' { exit }
         'Q' { exit }
+        default { 
+            Write-Host 'Invalid selection. Try again.' -ForegroundColor Red
+            Start-Sleep -Seconds 1 
+        }
     }
-} until ($Selection -eq 'Q')
+} until ($Selection -eq 'Q' -or $Selection -eq 'q')
