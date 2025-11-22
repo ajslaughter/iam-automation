@@ -1,3 +1,0 @@
-ComputerName,TargetOUDN,RenameTo
-WSLAB01,OU=Workstations,OU=Company,DC=corp,DC=local,WSLAB01
-SRVLAB01,OU=Servers,OU=Company,DC=corp,DC=local,
