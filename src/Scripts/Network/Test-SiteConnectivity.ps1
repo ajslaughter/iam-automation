@@ -1,9 +1,8 @@
 <#
 .SYNOPSIS
-    Rapidly diagnoses field site network connectivity, focusing on Meraki and VPN access.
+    Rapidly diagnoses field site network connectivity.
 .DESCRIPTION
-    Tests key network dependencies (Gateway, Internet, VPN, Meraki Cloud) for rapid fault isolation.
-    Addresses the job requirement for TCP/IP troubleshooting and diagnostic tools.
+    Tests key network dependencies (Gateway, Internet, VPN, Meraki Cloud).
 #>
 [CmdletBinding()]
 param(
@@ -14,41 +13,48 @@ param(
 
 function Test-Latency {
     param([string]$Target)
-    $ping = Test-Connection -ComputerName $Target -Count 3 -ErrorAction SilentlyContinue
-    if ($ping) {
+    try {
+        $ping = Test-Connection -ComputerName $Target -Count 3 -ErrorAction Stop
         $avg = ($ping.ResponseTime | Measure-Object -Average).Average
         return [PSCustomObject]@{ Status = "UP"; LatencyMs = [math]::Round($avg, 2) }
     }
-    return [PSCustomObject]@{ Status = "DOWN"; LatencyMs = $null }
+    catch {
+        return [PSCustomObject]@{ Status = "DOWN"; LatencyMs = 0 }
+    }
 }
 
-Write-Host "🔍 Starting Field Site Connectivity Diagnostics..." -ForegroundColor Cyan
+Write-Host "--- Starting Field Site Connectivity Diagnostics ---" -ForegroundColor Cyan
 
-# 1. Local Interface Check (Physical Layer)
+# 1. Local Interface Check
 $adapters = Get-NetAdapter | Where-Object { $_.Status -eq 'Up' }
 if (-not $adapters) {
-    Write-Error "❌ CRITICAL: No active network adapters found. Check physical layer."
+    Write-Error "[CRITICAL] No active network adapters found."
     return
 }
-Write-Host "✅ Active Adapter: $($adapters.Name -join ', ')"
+Write-Host " [OK] Active Adapter Found: $($adapters.Name)" -ForegroundColor Green
 
-# 2. Gateway & Internet Check (Transport Layer)
+# 2. Gateway & Internet Check
 $internet = Test-Latency -Target $CriticalGateway
-Write-Host "   - Internet Reachability to $CriticalGateway: $($internet.Status)" -ForegroundColor ($internet.Status -eq "UP" ? "Green" : "Red")
-if ($internet.Status -eq "UP") { Write-Host "     - Average Latency: $($internet.LatencyMs)ms" }
-
-# 3. Corporate VPN Check (Application Layer)
-$vpn = Test-Latency -Target $CorpVPNEndpoint
-Write-Host "   - Corporate VPN Endpoint ($CorpVPNEndpoint): $($vpn.Status)" -ForegroundColor ($vpn.Status -eq "UP" ? "Green" : "Red")
-
-# 4. Meraki Cloud Check (JD Specific)
-$meraki = Test-Latency -Target $MerakiDashboard
-Write-Host "   - Meraki Cloud Controller ($MerakiDashboard): $($meraki.Status)" -ForegroundColor ($meraki.Status -eq "UP" ? "Green" : "Red")
-if ($meraki.Status -ne "UP") { Write-Warning "⚠️ Meraki issues can block MDM and firewall policy updates." }
-
-# 5. Wireless Signal Strength (If applicable)
-if ($adapters | Where-Object { $_.InterfaceDescription -match "Wi-Fi|Wireless" }) {
-    $signal = (netsh wlan show interfaces) -match 'Signal'
-    Write-Host "   - $(($signal -split ':')[-1].Trim()) signal strength reported on adapter." -ForegroundColor Yellow
+if ($internet.Status -eq "UP") {
+    Write-Host " [OK] Internet Reachability to $CriticalGateway : UP ($($internet.LatencyMs) ms)" -ForegroundColor Green
+} else {
+    Write-Host " [FAIL] Internet Reachability to $CriticalGateway : DOWN" -ForegroundColor Red
 }
-Write-Host "✅ Diagnostics Complete." -ForegroundColor Cyan
+
+# 3. Corporate VPN Check
+$vpn = Test-Latency -Target $CorpVPNEndpoint
+if ($vpn.Status -eq "UP") {
+    Write-Host " [OK] Corporate VPN Endpoint ($CorpVPNEndpoint) : UP" -ForegroundColor Green
+} else {
+    Write-Host " [FAIL] Corporate VPN Endpoint ($CorpVPNEndpoint) : DOWN" -ForegroundColor Red
+}
+
+# 4. Meraki Cloud Check
+$meraki = Test-Latency -Target $MerakiDashboard
+if ($meraki.Status -eq "UP") {
+    Write-Host " [OK] Meraki Cloud Controller ($MerakiDashboard) : UP" -ForegroundColor Green
+} else {
+    Write-Host " [FAIL] Meraki Cloud Controller ($MerakiDashboard) : DOWN" -ForegroundColor Red
+}
+
+Write-Host "--- Diagnostics Complete ---" -ForegroundColor Cyan
