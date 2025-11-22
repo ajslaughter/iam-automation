@@ -9,22 +9,37 @@
 ## 🏗️ Executive Summary
 The **Field Operations Console** is a unified automation platform designed to standardize IT support across regional job sites. It addresses the specific challenges of the Systems Analyst role: **Safety Compliance**, **Remote Connectivity**, and **Asset Management**.
 
-## 🌟 Key Features
+## 🌟 Key Features (Console Menu 1-6)
 
-### 1. 🔒 Safety-First Architecture (IIF Culture)
-The console enforces the **Incident and Injury Free (IIF)** culture programmatically.
-- **Feature:** The "Technical Menu" (Network, Printing, Admin) is **locked** by default.
-- **Mechanism:** The engineer *must* complete the **Daily Safety Briefing** and acknowledge hazard checks before tools are enabled.
-- **Result:** Safety is not an afterthought; it is a prerequisite for IT operations.
+### [1] 🦺 Daily Safety Briefing
+**Enforces the IIF (Incident and Injury Free) Culture.**
+- **Function:** Locks all admin tools until the user acknowledges specific hazard checks (e.g., trip hazards, ladder safety).
+- **Why:** Ensures IT is compliant with safety protocols before technical work begins.
 
-### 2. 📡 Rapid Site Diagnostics
-- **One-Click Connectivity:** Tests Local Adapter -> Gateway -> Internet -> VPN -> Meraki Cloud in 5 seconds.
-- **Packet Capture:** Native Windows packet capture (ETL) for deep analysis without requiring 3rd party software installs in the field.
+### [2] 📡 Site Connectivity Test
+**Rapid "Inside-Out" Network Diagnostics.**
+- **Function:** Tests the full path: Local Adapter -> Gateway -> Internet (8.8.8.8) -> Corporate VPN -> Meraki Dashboard.
+- **Why:** Instantly isolates if an issue is Local (cable) or Upstream (ISP).
 
-### 3. 🛠️ Client & Peripheral Support
-- **Print Spooler Repair:** Automated remediation for the most common field office ticket (stuck print jobs).
-- **Workstation Prep:** Standardized "Field" vs "Office" software deployment profiles (Bluebeam, Citrix, Office 365).
-- **Asset Tagging:** Generates "Birth Certificate" CSVs for hardware inventory tracking.
+### [3] 🕸️ Packet Capture (Netsh)
+**Native Traffic Analysis.**
+- **Function:** Uses Windows `netsh trace` to record 60 seconds of packet data to an `.etl` log file.
+- **Why:** Allows for deep analysis on field laptops without requiring Wireshark installation.
+
+### [4] 🖨️ Repair Print System
+**One-Click Spooler Remediation.**
+- **Function:** Forcibly stops the Print Spooler, deletes corrupt `.SPL` files, and restarts the service.
+- **Why:** Automates the fix for the most common field office support ticket.
+
+### [5] 💻 Workstation Prep
+**SCCM / Imaging Simulation.**
+- **Function:** Configures a new laptop based on role ("Field" vs. "Office"). Installs specific software (Bluebeam, Citrix) and sets "High Performance" power plans.
+- **Why:** Standardizes endpoint deployment across regional sites.
+
+### [6] 📝 Device Asset Inventory
+**Automated Asset Tagging.**
+- **Function:** Scans WMI/CIM to generate a "Birth Certificate" CSV with Serial Number, Model, and OS Version.
+- **Why:** Maintains accurate hardware inventory data for the region.
 
 ## 🚀 Usage
 
